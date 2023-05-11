@@ -3,6 +3,7 @@ package com.gustavob.gamelist.services;
 import com.gustavob.gamelist.dto.GameDTO;
 import com.gustavob.gamelist.dto.GameMinDTO;
 import com.gustavob.gamelist.entities.Game;
+import com.gustavob.gamelist.projections.GameMinProjection;
 import com.gustavob.gamelist.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class GameService {
     @Transactional(readOnly = true)
     public List<GameMinDTO> findAll(){
         List<Game> result = gameRepository.findAll();
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId){
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
         return result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 }
